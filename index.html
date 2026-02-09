@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CleanResolver DNS</title>
+    <style>
+      :root {
+        --bg-1: #061826;
+        --bg-2: #0d2f44;
+        --card: #f3f8fc;
+        --ink: #0d1e2b;
+        --muted: #4b6478;
+        --accent: #1179d8;
+        --accent-2: #18a38d;
+        --line: #d9e7f2;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at 20% 10%, #1f5777 0, transparent 40%),
+          radial-gradient(circle at 85% 20%, #1b8f7f 0, transparent 45%),
+          linear-gradient(150deg, var(--bg-1), var(--bg-2));
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .card {
+        width: min(920px, 100%);
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 28px;
+        box-shadow: 0 25px 70px rgba(5, 20, 35, 0.35);
+        backdrop-filter: blur(3px);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        background: linear-gradient(90deg, rgba(17, 121, 216, 0.14), rgba(24, 163, 141, 0.14));
+        color: #0b4f82;
+      }
+
+      .lang-btn {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        color: var(--ink);
+        font-weight: 600;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+
+      h1 {
+        margin: 18px 0 10px;
+        font-size: clamp(28px, 5vw, 42px);
+        line-height: 1.1;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .intro {
+        margin-top: 14px;
+      }
+
+      .grid {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 16px;
+        background: #fff;
+      }
+
+      .panel h2 {
+        margin: 0 0 10px;
+        font-size: 18px;
+      }
+
+      .list {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .server-list {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 14px;
+      }
+
+      .server {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+        background: #fff;
+      }
+
+      .server-title {
+        margin: 0 0 10px;
+        font-size: 16px;
+        color: #0b4f82;
+      }
+
+      .ip-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+        border: 1px solid #edf2f7;
+        border-radius: 10px;
+        padding: 10px;
+        margin-top: 8px;
+        background: #fbfdff;
+      }
+
+      .ip-line code {
+        word-break: break-all;
+        color: #163249;
+      }
+
+      .copy-btn {
+        flex-shrink: 0;
+        border: 1px solid #c7dced;
+        border-radius: 8px;
+        background: white;
+        color: #21577f;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 6px 8px;
+        cursor: pointer;
+        margin-left: auto;
+      }
+
+      .setup {
+        margin-top: 24px;
+      }
+
+      .setup-head h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+
+      .setup-head p {
+        margin-top: 8px;
+      }
+
+      .setup-grid {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 14px;
+      }
+
+      .setup-card {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+        background: #fff;
+      }
+
+      .setup-card h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #0b4f82;
+      }
+
+      .meta {
+        margin-top: 8px;
+        font-size: 13px;
+        color: #47647a;
+        overflow-wrap: anywhere;
+      }
+
+      .meta code {
+        word-break: break-all;
+      }
+
+      .step-list {
+        margin: 10px 0 0;
+        padding-left: 22px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .step-list li {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+
+      .notice {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #31546e;
+        overflow-wrap: anywhere;
+      }
+
+      .faq {
+        margin-top: 24px;
+      }
+
+      .faq-head h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+
+      .faq-head p {
+        margin-top: 8px;
+      }
+
+      .faq-list {
+        margin-top: 12px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .faq-item {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        padding: 10px 12px;
+      }
+
+      .faq-item summary {
+        cursor: pointer;
+        color: #15364d;
+        font-weight: 700;
+      }
+
+      .faq-item p {
+        margin-top: 10px;
+      }
+
+      .status {
+        margin-top: 16px;
+        min-height: 20px;
+        font-size: 13px;
+        color: #2f6b93;
+      }
+
+      footer {
+        margin-top: 14px;
+        font-size: 13px;
+        color: #67869e;
+      }
+
+      @media (max-width: 640px) {
+        .card {
+          padding: 20px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <div class="topbar">
+        <span class="badge" data-i18n="badge"></span>
+        <button class="lang-btn" id="langToggle" type="button"></button>
+      </div>
+
+      <h1 data-i18n="title"></h1>
+      <p class="intro" data-i18n="intro"></p>
+
+      <section class="grid">
+        <article class="panel">
+          <h2 data-i18n="h3Title"></h2>
+          <ul class="list">
+            <li data-i18n="h3Point1"></li>
+            <li data-i18n="h3Point2"></li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <h2 data-i18n="ecsTitle"></h2>
+          <p data-i18n="ecsText"></p>
+        </article>
+      </section>
+
+      <section class="server-list">
+        <article class="server">
+          <h3 class="server-title" data-i18n="server1Title"></h3>
+          <div class="ip-line">
+            <code>198.46.138.165</code>
+            <button class="copy-btn" data-copy="198.46.138.165" data-i18n="copyBtn"></button>
+          </div>
+          <div class="ip-line">
+            <code>2607:5dc0:0:3e::3a28:a8cd</code>
+            <button class="copy-btn" data-copy="2607:5dc0:0:3e::3a28:a8cd" data-i18n="copyBtn"></button>
+          </div>
+        </article>
+
+        <article class="server">
+          <h3 class="server-title" data-i18n="server2Title"></h3>
+          <div class="ip-line">
+            <code>142.171.179.89</code>
+            <button class="copy-btn" data-copy="142.171.179.89" data-i18n="copyBtn"></button>
+          </div>
+          <div class="ip-line">
+            <code>2607:f130:0:1dc::d2d4:e19d</code>
+            <button class="copy-btn" data-copy="2607:f130:0:1dc::d2d4:e19d" data-i18n="copyBtn"></button>
+          </div>
+        </article>
+
+        <article class="server">
+          <h3 class="server-title" data-i18n="copyBlockTitle"></h3>
+          <p class="meta" data-i18n="copyDohLabel"></p>
+          <div class="ip-line">
+            <code>https://dns.cleanresolver.com/dns-query{?dns}</code>
+            <button
+              class="copy-btn"
+              data-copy="https://dns.cleanresolver.com/dns-query{?dns}"
+              data-i18n="copyBtn"
+            ></button>
+          </div>
+          <p class="meta" data-i18n="copyHostLabel"></p>
+          <div class="ip-line">
+            <code>dns.cleanresolver.com</code>
+            <button class="copy-btn" data-copy="dns.cleanresolver.com" data-i18n="copyBtn"></button>
+          </div>
+        </article>
+      </section>
+
+      <section class="setup">
+        <div class="setup-head">
+          <h2 data-i18n="setupTitle"></h2>
+          <p data-i18n="setupIntro"></p>
+        </div>
+
+        <div class="setup-grid">
+          <article class="setup-card">
+            <h3 data-i18n="winTitle"></h3>
+            <p class="meta"><span data-i18n="dohTemplateLabel"></span> <code>https://dns.cleanresolver.com/dns-query{?dns}</code></p>
+            <ol class="step-list">
+              <li data-i18n="winStep1"></li>
+              <li data-i18n="winStep2"></li>
+              <li data-i18n="winStep3"></li>
+            </ol>
+          </article>
+
+          <article class="setup-card">
+            <h3 data-i18n="chromeTitle"></h3>
+            <p class="meta"><span data-i18n="chromeDohSharedLabel"></span> <code>https://dns.cleanresolver.com/dns-query{?dns}</code></p>
+            <ol class="step-list">
+              <li data-i18n="chromeStep1"></li>
+              <li data-i18n="chromeStep2"></li>
+              <li data-i18n="chromeStep3"></li>
+            </ol>
+          </article>
+
+          <article class="setup-card">
+            <h3 data-i18n="macTitle"></h3>
+            <ol class="step-list">
+              <li data-i18n="macStep1"></li>
+              <li data-i18n="macStep2"></li>
+              <li data-i18n="macStep3"></li>
+            </ol>
+          </article>
+
+          <article class="setup-card">
+            <h3 data-i18n="iosTitle"></h3>
+            <ol class="step-list">
+              <li data-i18n="iosStep1"></li>
+              <li data-i18n="iosStep2"></li>
+              <li data-i18n="iosStep3"></li>
+            </ol>
+          </article>
+
+          <article class="setup-card">
+            <h3 data-i18n="androidTitle"></h3>
+            <p class="meta"><span data-i18n="dotLabel"></span> <code>dns.cleanresolver.com</code></p>
+            <ol class="step-list">
+              <li data-i18n="androidStep1"></li>
+              <li data-i18n="androidStep2"></li>
+              <li data-i18n="androidStep3"></li>
+            </ol>
+          </article>
+        </div>
+
+        <p class="notice" data-i18n="protocolNote"></p>
+      </section>
+
+      <section class="faq">
+        <div class="faq-head">
+          <h2 data-i18n="faqTitle"></h2>
+          <p data-i18n="faqIntro"></p>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary data-i18n="faqQ1"></summary>
+            <p data-i18n="faqA1"></p>
+          </details>
+          <details class="faq-item">
+            <summary data-i18n="faqQ2"></summary>
+            <p data-i18n="faqA2"></p>
+          </details>
+          <details class="faq-item">
+            <summary data-i18n="faqQ3"></summary>
+            <p data-i18n="faqA3"></p>
+          </details>
+          <details class="faq-item">
+            <summary data-i18n="faqQ4"></summary>
+            <p data-i18n="faqA4"></p>
+          </details>
+          <details class="faq-item">
+            <summary data-i18n="faqQ5"></summary>
+            <p data-i18n="faqA5"></p>
+          </details>
+          <details class="faq-item">
+            <summary data-i18n="faqQ6"></summary>
+            <p data-i18n="faqA6"></p>
+          </details>
+        </div>
+      </section>
+
+      <p id="copyStatus" class="status" aria-live="polite"></p>
+      <footer data-i18n="footer"></footer>
+    </main>
+
+    <script>
+      const i18n = {
+        zh: {
+          badge: "Multi-Protocol Public DNS",
+          title: "CleanResolver 公共 DNS",
+          intro:
+            "为无法获得真实解析结果（被污染）的用户提供更干净、稳定的 DNS 解析服务。项目域名：cleanresolver.com。",
+          h3Title: "协议支持",
+          h3Point1: "完整支持 Do53（UDP/TCP）、DoT、DoQ、DoH、DoH3。",
+          h3Point2: "通过 zone 文件优先 QUIC/HTTP3 路径，减少阻碍并提升连接成功率。",
+          ecsTitle: "ECS 最优 CDN 路由",
+          ecsText:
+            "本服务默认开启 ECS（EDNS Client Subnet），解析会更贴近用户网络位置，尽量返回更优的 CDN 边缘节点 IP。",
+          server1Title: "DNS 服务器 1",
+          server2Title: "DNS 服务器 2",
+          copyBlockTitle: "加密 DNS",
+          copyDohLabel: "DoH / DoH3 模板（Windows / Chrome）",
+          copyHostLabel: "DoT 主机名（DoQ 同主机名）",
+          setupTitle: "快速配置指南",
+          setupIntro:
+            "按平台选择一种方式即可。你可以按终端能力选择 Do53（UDP/TCP）、DoT、DoQ、DoH 或 DoH3。",
+          winTitle: "Windows 10/11",
+          dohTemplateLabel: "DoH 自动模板：",
+          winStep1:
+            "进入 设置 -> 网络和 Internet -> 当前网络 -> DNS 服务器分配，选择“手动”。",
+          winStep2:
+            "添加 DNS 服务器：IPv4 为 198.46.138.165、142.171.179.89；IPv6 为 2607:5dc0:0:3e::3a28:a8cd、2607:f130:0:1dc::d2d4:e19d。",
+          winStep3:
+            "开启 DNS over HTTPS，使用上方模板并保存。",
+          chromeTitle: "Chrome（Windows/macOS）",
+          chromeDohSharedLabel: "与 Windows 相同的 DoH 模板：",
+          chromeStep1: "打开 chrome://settings/security。",
+          chromeStep2: "在“使用安全 DNS”中选择“自定义”。",
+          chromeStep3: "填写上方模板并保存。",
+          macTitle: "macOS",
+          macStep1: "系统设置 -> 网络 -> 当前网络 -> 详细信息 -> DNS。",
+          macStep2:
+            "点击“+”添加 DNS：IPv4 为 198.46.138.165、142.171.179.89；IPv6 为 2607:5dc0:0:3e::3a28:a8cd、2607:f130:0:1dc::d2d4:e19d。",
+          macStep3: "应用后建议同时在 Chrome 中启用“自定义安全 DNS”。",
+          iosTitle: "iOS / iPadOS",
+          iosStep1: "设置 -> WLAN -> 当前 Wi-Fi -> 配置 DNS。",
+          iosStep2:
+            "选择“手动”，删除旧条目后添加 198.46.138.165、142.171.179.89、2607:5dc0:0:3e::3a28:a8cd、2607:f130:0:1dc::d2d4:e19d。",
+          iosStep3: "保存并重新连接该 Wi-Fi。",
+          androidTitle: "Android",
+          dotLabel: "私密 DNS 主机名（DoT）：",
+          androidStep1:
+            "设置 -> 网络和互联网 -> 私密 DNS（不同厂商菜单路径可能略有差异）。",
+          androidStep2: "选择“私密 DNS 提供商主机名”。",
+          androidStep3:
+            "输入 dns.cleanresolver.com 并保存；若设备使用手动 DNS，请添加 IPv4：198.46.138.165、142.171.179.89；IPv6：2607:5dc0:0:3e::3a28:a8cd、2607:f130:0:1dc::d2d4:e19d。",
+          protocolNote:
+            "说明：本服务同时支持 Do53（UDP/TCP）、DoT、DoQ、DoH、DoH3。各系统入口不同：Windows/Chrome 常用 DoH，Android 私密 DNS 常用 DoT，无法使用加密协议时可直接用上方 IPv4/IPv6（Do53）。",
+          faqTitle: "FAQ 常见问题",
+          faqIntro: "点击问题即可展开答案。",
+          faqQ1: "支持哪些协议？",
+          faqA1: "支持 Do53（UDP/TCP）、DoT、DoQ、DoH、DoH3。",
+          faqQ2: "我该优先选哪种方式？",
+          faqA2: "优先使用加密协议（DoH/DoH3、DoT、DoQ）；若设备或网络不支持，再使用手动 Do53。",
+          faqQ3: "为什么还要配置 IPv4/IPv6 地址？",
+          faqA3: "手动地址可作为通用回退方案，也方便在不支持模板或主机名的环境中直接使用。",
+          faqQ4: "ECS 的作用是什么？",
+          faqA4: "ECS 会让解析更贴近用户网络位置，通常可返回更优的 CDN 边缘节点。",
+          faqQ5: "Chrome 和系统 DNS 会冲突吗？",
+          faqA5: "Chrome 的“自定义安全 DNS”主要影响 Chrome 内解析，系统 DNS 仍会被其他应用使用。",
+          faqQ6: "配置后没有生效怎么办？",
+          faqA6: "先重连网络并清理本地 DNS 缓存，再检查地址或模板是否正确，必要时先用手动 Do53 测试。",
+          copyBtn: "复制",
+          copied: "已复制：",
+          copyFail: "复制失败，请手动复制。",
+          footer: "© CleanResolver · Do53/DoT/DoQ/DoH/DoH3 · ECS Enabled",
+          langSwitch: "English"
+        },
+        en: {
+          badge: "Multi-Protocol Public DNS",
+          title: "CleanResolver Public DNS",
+          intro:
+            "A cleaner DNS resolver for users who cannot obtain genuine DNS answers due to DNS pollution. Project domain: cleanresolver.com.",
+          h3Title: "Protocol Support",
+          h3Point1:
+            "Fully supports Do53 (UDP/TCP), DoT, DoQ, DoH, and DoH3.",
+          h3Point2:
+            "Zone tuning prioritizes QUIC/HTTP3 paths to improve reachability and reliability.",
+          ecsTitle: "ECS for Better CDN Routing",
+          ecsText:
+            "ECS (EDNS Client Subnet) is enabled by default, so responses can map closer to user network locality and return more optimal CDN edge IP paths.",
+          server1Title: "DNS Server 1",
+          server2Title: "DNS Server 2",
+          copyBlockTitle: "Encrypted DNS",
+          copyDohLabel: "DoH / DoH3 Template (Windows / Chrome)",
+          copyHostLabel: "DoT Hostname (Same for DoQ)",
+          setupTitle: "Quick Setup Guide",
+          setupIntro:
+            "Pick the method for your platform. You can use Do53 (UDP/TCP), DoT, DoQ, DoH, or DoH3 based on client support.",
+          winTitle: "Windows 10/11",
+          dohTemplateLabel: "DoH auto template:",
+          winStep1:
+            "Open Settings -> Network & Internet -> current network -> DNS server assignment, then select Manual.",
+          winStep2:
+            "Add DNS servers: IPv4 198.46.138.165, 142.171.179.89; IPv6 2607:5dc0:0:3e::3a28:a8cd, 2607:f130:0:1dc::d2d4:e19d.",
+          winStep3:
+            "Enable DNS over HTTPS, use the template above, then save.",
+          chromeTitle: "Chrome (Windows/macOS)",
+          chromeDohSharedLabel: "Same DoH template as Windows:",
+          chromeStep1: "Open chrome://settings/security.",
+          chromeStep2: "Under Use secure DNS, select With Custom.",
+          chromeStep3: "Enter the template above and save.",
+          macTitle: "macOS",
+          macStep1: "Open System Settings -> Network -> current network -> Details -> DNS.",
+          macStep2:
+            "Click + and add DNS servers: IPv4 198.46.138.165, 142.171.179.89; IPv6 2607:5dc0:0:3e::3a28:a8cd, 2607:f130:0:1dc::d2d4:e19d.",
+          macStep3: "Apply changes, then optionally enable Custom Secure DNS in Chrome.",
+          iosTitle: "iOS / iPadOS",
+          iosStep1: "Open Settings -> Wi-Fi -> current network -> Configure DNS.",
+          iosStep2:
+            "Choose Manual, remove old entries, then add 198.46.138.165, 142.171.179.89, 2607:5dc0:0:3e::3a28:a8cd, and 2607:f130:0:1dc::d2d4:e19d.",
+          iosStep3: "Save and reconnect to this Wi-Fi.",
+          androidTitle: "Android",
+          dotLabel: "Private DNS hostname (DoT):",
+          androidStep1:
+            "Open Settings -> Network & Internet -> Private DNS (path may vary by vendor).",
+          androidStep2: "Select Private DNS provider hostname.",
+          androidStep3:
+            "Enter dns.cleanresolver.com and save. If your device uses manual DNS mode, add IPv4: 198.46.138.165, 142.171.179.89 and IPv6: 2607:5dc0:0:3e::3a28:a8cd, 2607:f130:0:1dc::d2d4:e19d.",
+          protocolNote:
+            "Note: This service supports Do53 (UDP/TCP), DoT, DoQ, DoH, and DoH3. Platform entry points differ: Windows/Chrome commonly use DoH, Android Private DNS commonly uses DoT, and manual IPv4/IPv6 above works as Do53 fallback.",
+          faqTitle: "FAQ",
+          faqIntro: "Click a question to expand the answer.",
+          faqQ1: "Which protocols are supported?",
+          faqA1: "Supports Do53 (UDP/TCP), DoT, DoQ, DoH, and DoH3.",
+          faqQ2: "Which method should I use first?",
+          faqA2: "Prefer encrypted DNS (DoH/DoH3, DoT, DoQ). If unsupported on your network/device, use manual Do53.",
+          faqQ3: "Why still provide IPv4/IPv6 server IPs?",
+          faqA3: "Manual IPs are a universal fallback and work in environments that do not support templates or hostnames.",
+          faqQ4: "What does ECS do here?",
+          faqA4: "ECS helps map answers closer to user network locality, usually returning better CDN edge paths.",
+          faqQ5: "Will Chrome DNS conflict with system DNS?",
+          faqA5: "Chrome Custom Secure DNS mainly affects lookups inside Chrome; other apps still follow system DNS.",
+          faqQ6: "What if changes do not take effect?",
+          faqA6: "Reconnect the network and clear local DNS cache, then verify entries. If needed, test with manual Do53 first.",
+          copyBtn: "Copy",
+          copied: "Copied:",
+          copyFail: "Copy failed. Please copy manually.",
+          footer: "© CleanResolver · Do53/DoT/DoQ/DoH/DoH3 · ECS Enabled",
+          langSwitch: "中文"
+        }
+      };
+
+      const languageButton = document.getElementById("langToggle");
+      const status = document.getElementById("copyStatus");
+      let currentLang = "en";
+
+      function applyLanguage(lang) {
+        currentLang = lang;
+        const textMap = i18n[lang];
+        document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+
+        document.querySelectorAll("[data-i18n]").forEach((node) => {
+          const key = node.getAttribute("data-i18n");
+          if (textMap[key]) node.textContent = textMap[key];
+        });
+
+        languageButton.textContent = textMap.langSwitch;
+      }
+
+      async function copyText(value) {
+        try {
+          await navigator.clipboard.writeText(value);
+          status.textContent = `${i18n[currentLang].copied} ${value}`;
+        } catch (error) {
+          status.textContent = i18n[currentLang].copyFail;
+        }
+      }
+
+      document.querySelectorAll("[data-copy]").forEach((button) => {
+        button.addEventListener("click", () => {
+          copyText(button.getAttribute("data-copy"));
+        });
+      });
+
+      languageButton.addEventListener("click", () => {
+        applyLanguage(currentLang === "zh" ? "en" : "zh");
+        status.textContent = "";
+      });
+
+      const browserLanguage = (navigator.language || "en").toLowerCase();
+      const initialLanguage = browserLanguage.startsWith("zh") ? "zh" : "en";
+      applyLanguage(initialLanguage);
+    </script>
+  </body>
+</html>
