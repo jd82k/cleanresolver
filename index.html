@@ -470,7 +470,7 @@
           server1Title: "DNS 服务器 1",
           server2Title: "DNS 服务器 2",
           copyBlockTitle: "加密 DNS",
-          copyDohLabel: "DoH / DoH3 模板（Windows / Chrome）",
+          copyDohLabel: "DoH / DoH3 模板（Windows / Chrome / Edge）",
           copyHostLabel: "DoT 主机名（DoQ 同主机名）",
           setupTitle: "快速配置指南",
           setupIntro:
@@ -483,16 +483,16 @@
             "添加 DNS 服务器：IPv4 为 198.46.138.165、142.171.179.89；IPv6 为 2607:5dc0:0:3e::3a28:a8cd、2607:f130:0:1dc::d2d4:e19d。",
           winStep3:
             "开启 DNS over HTTPS，使用上方模板并保存。",
-          chromeTitle: "Chrome（Windows/macOS）",
+          chromeTitle: "Chrome / Edge（Windows/macOS）",
           chromeDohSharedLabel: "与 Windows 相同的 DoH 模板：",
-          chromeStep1: "打开 chrome://settings/security。",
+          chromeStep1: "打开 chrome://settings/security 或 edge://settings/privacy。",
           chromeStep2: "在“使用安全 DNS”中选择“自定义”。",
           chromeStep3: "填写上方模板并保存。",
           macTitle: "macOS",
           macStep1: "系统设置 -> 网络 -> 当前网络 -> 详细信息 -> DNS。",
           macStep2:
             "点击“+”添加 DNS：IPv4 为 198.46.138.165、142.171.179.89；IPv6 为 2607:5dc0:0:3e::3a28:a8cd、2607:f130:0:1dc::d2d4:e19d。",
-          macStep3: "应用后建议同时在 Chrome 中启用“自定义安全 DNS”。",
+          macStep3: "应用后建议同时在 Chrome 或 Edge 中启用“自定义安全 DNS”。",
           iosTitle: "iOS / iPadOS",
           iosStep1: "设置 -> WLAN -> 当前 Wi-Fi -> 配置 DNS。",
           iosStep2:
@@ -506,7 +506,7 @@
           androidStep3:
             "输入 dns.cleanresolver.com 并保存；若设备使用手动 DNS，请添加 IPv4：198.46.138.165、142.171.179.89；IPv6：2607:5dc0:0:3e::3a28:a8cd、2607:f130:0:1dc::d2d4:e19d。",
           protocolNote:
-            "说明：本服务同时支持 Do53（UDP/TCP）、DoT、DoQ、DoH、DoH3。各系统入口不同：Windows/Chrome 常用 DoH，Android 私密 DNS 常用 DoT，无法使用加密协议时可直接用上方 IPv4/IPv6（Do53）。",
+            "说明：本服务同时支持 Do53（UDP/TCP）、DoT、DoQ、DoH、DoH3。各系统入口不同：Windows/Chrome/Edge 常用 DoH，Android 私密 DNS 常用 DoT，无法使用加密协议时可直接用上方 IPv4/IPv6（Do53）。",
           faqTitle: "FAQ 常见问题",
           faqIntro: "点击问题即可展开答案。",
           faqQ1: "支持哪些协议？",
@@ -517,8 +517,8 @@
           faqA3: "手动地址可作为通用回退方案，也方便在不支持模板或主机名的环境中直接使用。",
           faqQ4: "ECS 的作用是什么？",
           faqA4: "ECS 会让解析更贴近用户网络位置，通常可返回更优的 CDN 边缘节点。",
-          faqQ5: "Chrome 和系统 DNS 会冲突吗？",
-          faqA5: "Chrome 的“自定义安全 DNS”主要影响 Chrome 内解析，系统 DNS 仍会被其他应用使用。",
+          faqQ5: "Chrome / Edge 和系统 DNS 会冲突吗？",
+          faqA5: "Chrome 或 Edge 的“自定义安全 DNS”主要影响浏览器内解析，系统 DNS 仍会被其他应用使用。",
           faqQ6: "配置后没有生效怎么办？",
           faqA6: "先重连网络并清理本地 DNS 缓存，再检查地址或模板是否正确，必要时先用手动 Do53 测试。",
           copyBtn: "复制",
@@ -543,7 +543,7 @@
           server1Title: "DNS Server 1",
           server2Title: "DNS Server 2",
           copyBlockTitle: "Encrypted DNS",
-          copyDohLabel: "DoH / DoH3 Template (Windows / Chrome)",
+          copyDohLabel: "DoH / DoH3 Template (Windows / Chrome / Edge)",
           copyHostLabel: "DoT Hostname (Same for DoQ)",
           setupTitle: "Quick Setup Guide",
           setupIntro:
@@ -556,16 +556,16 @@
             "Add DNS servers: IPv4 198.46.138.165, 142.171.179.89; IPv6 2607:5dc0:0:3e::3a28:a8cd, 2607:f130:0:1dc::d2d4:e19d.",
           winStep3:
             "Enable DNS over HTTPS, use the template above, then save.",
-          chromeTitle: "Chrome (Windows/macOS)",
+          chromeTitle: "Chrome / Edge (Windows/macOS)",
           chromeDohSharedLabel: "Same DoH template as Windows:",
-          chromeStep1: "Open chrome://settings/security.",
+          chromeStep1: "Open chrome://settings/security or edge://settings/privacy.",
           chromeStep2: "Under Use secure DNS, select With Custom.",
           chromeStep3: "Enter the template above and save.",
           macTitle: "macOS",
           macStep1: "Open System Settings -> Network -> current network -> Details -> DNS.",
           macStep2:
             "Click + and add DNS servers: IPv4 198.46.138.165, 142.171.179.89; IPv6 2607:5dc0:0:3e::3a28:a8cd, 2607:f130:0:1dc::d2d4:e19d.",
-          macStep3: "Apply changes, then optionally enable Custom Secure DNS in Chrome.",
+          macStep3: "Apply changes, then optionally enable Custom Secure DNS in Chrome or Edge.",
           iosTitle: "iOS / iPadOS",
           iosStep1: "Open Settings -> Wi-Fi -> current network -> Configure DNS.",
           iosStep2:
@@ -579,7 +579,7 @@
           androidStep3:
             "Enter dns.cleanresolver.com and save. If your device uses manual DNS mode, add IPv4: 198.46.138.165, 142.171.179.89 and IPv6: 2607:5dc0:0:3e::3a28:a8cd, 2607:f130:0:1dc::d2d4:e19d.",
           protocolNote:
-            "Note: This service supports Do53 (UDP/TCP), DoT, DoQ, DoH, and DoH3. Platform entry points differ: Windows/Chrome commonly use DoH, Android Private DNS commonly uses DoT, and manual IPv4/IPv6 above works as Do53 fallback.",
+            "Note: This service supports Do53 (UDP/TCP), DoT, DoQ, DoH, and DoH3. Platform entry points differ: Windows/Chrome/Edge commonly use DoH, Android Private DNS commonly uses DoT, and manual IPv4/IPv6 above works as Do53 fallback.",
           faqTitle: "FAQ",
           faqIntro: "Click a question to expand the answer.",
           faqQ1: "Which protocols are supported?",
@@ -590,8 +590,8 @@
           faqA3: "Manual IPs are a universal fallback and work in environments that do not support templates or hostnames.",
           faqQ4: "What does ECS do here?",
           faqA4: "ECS helps map answers closer to user network locality, usually returning better CDN edge paths.",
-          faqQ5: "Will Chrome DNS conflict with system DNS?",
-          faqA5: "Chrome Custom Secure DNS mainly affects lookups inside Chrome; other apps still follow system DNS.",
+          faqQ5: "Will Chrome / Edge DNS conflict with system DNS?",
+          faqA5: "Custom Secure DNS in Chrome or Edge mainly affects lookups inside the browser; other apps still follow system DNS.",
           faqQ6: "What if changes do not take effect?",
           faqA6: "Reconnect the network and clear local DNS cache, then verify entries. If needed, test with manual Do53 first.",
           copyBtn: "Copy",
